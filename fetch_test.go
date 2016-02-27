@@ -8,7 +8,7 @@ import (
 )
 
 func TestFetch(t *testing.T) {
-	pmg := PubmedGetter{
+	pmg := Fetcher{
 		Transport: &http.Transport{
 			ResponseHeaderTimeout: time.Second * 500,
 			DisableKeepAlives:     false,
@@ -27,7 +27,7 @@ func TestFetch(t *testing.T) {
 }
 
 func TestFetch_BadUrl(t *testing.T) {
-	pmg := PubmedGetter{
+	pmg := Fetcher{
 		Transport: &http.Transport{
 			ResponseHeaderTimeout: time.Second * 500,
 			DisableKeepAlives:     false,
@@ -45,7 +45,7 @@ func TestFetch_BadUrl(t *testing.T) {
 }
 
 func TestFetch_BadPmids(t *testing.T) {
-	pmg := PubmedGetter{
+	pmg := Fetcher{
 		Transport: &http.Transport{
 			ResponseHeaderTimeout: time.Second * 500,
 			DisableKeepAlives:     false,
@@ -66,7 +66,7 @@ func TestFetch_BadPmids(t *testing.T) {
 }
 
 func TestFetch_GoodAndBadPmids(t *testing.T) {
-	pmg := PubmedGetter{
+	pmg := Fetcher{
 		Transport: &http.Transport{
 			ResponseHeaderTimeout: time.Second * 500,
 			DisableKeepAlives:     false,
@@ -87,7 +87,7 @@ func TestFetch_GoodAndBadPmids(t *testing.T) {
 }
 
 func TestFetch_Transport(t *testing.T) {
-	pmg := PubmedGetter{
+	pmg := Fetcher{
 		Transport: nil,
 	}
 

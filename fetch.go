@@ -10,18 +10,18 @@ import (
 
 const BASE_ENTREZ_URL_FETCH_PUBMED = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=xml&id="
 
-type PubmedGetter struct {
+type Fetcher struct {
 	Transport *http.Transport
 	BaseUrl   string
 }
 
-func (pmg *PubmedGetter) GetArticles(pmids []string) ([]PubmedArticle, error) {
+func (pmg *Fetcher) GetArticles(pmids []string) ([]PubmedArticle, error) {
 	articles, _, err := pmg.GetArticlesAndRaw(pmids)
 	return articles, err
 
 }
 
-func (pmg *PubmedGetter) GetArticlesAndRaw(pmids []string) ([]PubmedArticle, []byte, error) {
+func (pmg *Fetcher) GetArticlesAndRaw(pmids []string) ([]PubmedArticle, []byte, error) {
 	if len(pmids) == 0 {
 		return nil, nil, errors.New("Error: Empty list of pmids")
 	}
@@ -49,7 +49,7 @@ func (pmg *PubmedGetter) GetArticlesAndRaw(pmids []string) ([]PubmedArticle, []b
 	return v.ArticleList, body, nil
 }
 
-func (pmg *PubmedGetter) GetArticlesRaw(pmids []string) ([]byte, error) {
+func (pmg *Fetcher) GetArticlesRaw(pmids []string) ([]byte, error) {
 	_, body, err := pmg.GetArticlesAndRaw(pmids)
 	return body, err
 }
