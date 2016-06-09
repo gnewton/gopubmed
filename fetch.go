@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/xml"
 	"errors"
+	"github.com/gnewton/pubmedstruct"
 	"log"
 	"net/http"
 )
@@ -15,13 +16,13 @@ type Fetcher struct {
 	BaseUrl   string
 }
 
-func (pmg *Fetcher) GetArticles(pmids []string) ([]PubmedArticle, error) {
+func (pmg *Fetcher) GetArticles(pmids []string) ([]*pubmedstruct.PubmedArticle, error) {
 	articles, _, err := pmg.GetArticlesAndRaw(pmids)
 	return articles, err
 
 }
 
-func (pmg *Fetcher) GetArticlesAndRaw(pmids []string) ([]PubmedArticle, []byte, error) {
+func (pmg *Fetcher) GetArticlesAndRaw(pmids []string) ([]*pubmedstruct.PubmedArticle, []byte, error) {
 	if len(pmids) == 0 {
 		return nil, nil, errors.New("Error: Empty list of pmids")
 	}
@@ -35,18 +36,18 @@ func (pmg *Fetcher) GetArticlesAndRaw(pmids []string) ([]PubmedArticle, []byte, 
 		return nil, nil, err
 	}
 
-	v := ArticleSet{}
+	v := pubmedstruct.PubmedArticleSet{}
 	err = xml.Unmarshal(body, &v)
 	if err != nil {
 		log.Println(err)
 		return nil, nil, err
 	}
 
-	if v.ArticleList == nil {
-		var pma []PubmedArticle
+	if v.PubmedArticle == nil {
+		var pma []*pubmedstruct.PubmedArticle
 		return pma, body, nil
 	}
-	return v.ArticleList, body, nil
+	return v.PubmedArticle, body, nil
 }
 
 func (pmg *Fetcher) GetArticlesRaw(pmids []string) ([]byte, error) {
