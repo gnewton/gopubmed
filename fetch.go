@@ -70,6 +70,10 @@ func getPubmedArticlesRaw(pmids []string, transport *http.Transport, baseUrl str
 
 	url := makeUrl(baseUrl, pmids)
 
+	if Debug {
+		log.Println("Getting: ", url)
+	}
+
 	client := &http.Client{Transport: transport}
 	req, err := http.NewRequest("GET", url, nil)
 	req.Close = true
@@ -85,6 +89,8 @@ func getPubmedArticlesRaw(pmids []string, transport *http.Transport, baseUrl str
 	buf.ReadFrom(resp.Body)
 	return buf.Bytes(), nil
 }
+
+var Debug = false
 
 func makeUrl(baseUrl string, pmids []string) string {
 	url := baseUrl
