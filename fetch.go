@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-const BASE_ENTREZ_URL_FETCH_PUBMED = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=xml&id="
+const BASE_ENTREZ_URL_FETCH_PUBMED = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=xml&id="
 
 type Fetcher struct {
 	Transport *http.Transport
@@ -69,6 +69,7 @@ func getPubmedArticlesRaw(pmids []string, transport *http.Transport, baseUrl str
 	}
 
 	url := makeUrl(baseUrl, pmids)
+
 	client := &http.Client{Transport: transport}
 	req, err := http.NewRequest("GET", url, nil)
 	req.Close = true

@@ -1,6 +1,7 @@
 package gopubmed
 
 import (
+	//"crypto/tls"
 	"log"
 	"net/http"
 	"testing"
@@ -13,11 +14,13 @@ func TestFetch(t *testing.T) {
 			ResponseHeaderTimeout: time.Second * 500,
 			DisableKeepAlives:     false,
 			DisableCompression:    false,
+			//TLSClientConfig:       &tls.Config{InsecureSkipVerify: true},
 		},
 	}
 
 	pmids := []string{"24000000", "24000001", "24000002", "24000003"}
 	articles, err := pmg.GetArticles(pmids)
+	log.Printf("%+v\n", articles[0].MedlineCitation)
 	if err != nil {
 		log.Fatal(err)
 	}
