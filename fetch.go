@@ -9,11 +9,12 @@ import (
 	"net/http"
 )
 
-const BASE_ENTREZ_URL_FETCH_PUBMED = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=xml&id="
+const BASE_ENTREZ_URL_FETCH_PUBMED = "eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=xml&id="
 
 type Fetcher struct {
 	Transport *http.Transport
 	BaseUrl   string
+	Ssl bool
 }
 
 func (pmg *Fetcher) GetArticles(pmids []string) ([]*pubmedstruct.PubmedArticle, error) {
@@ -27,8 +28,12 @@ func (pmg *Fetcher) GetArticlesAndRaw(pmids []string) ([]*pubmedstruct.PubmedArt
 		return nil, nil, errors.New("Error: Empty list of pmids")
 	}
 	if pmg.BaseUrl == "" {
-		pmg.BaseUrl = BASE_ENTREZ_URL_FETCH_PUBMED
+	   if pmg.Ssl {
+	       pmg.BaseUrl = "https://" + BASE_ENTREZ_URL_FETCH_PUBMED
+	       }else{
+		pmg.BaseUrl = "http://" + BASE_ENTREZ_URL_FETCH_PUBMED
 	}
+}
 
 	body, err := getPubmedArticlesRaw(pmids, pmg.Transport, pmg.BaseUrl)
 	if err != nil {
