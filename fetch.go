@@ -14,7 +14,7 @@ const BASE_ENTREZ_URL_FETCH_PUBMED = "eutils.ncbi.nlm.nih.gov/entrez/eutils/efet
 type Fetcher struct {
 	Transport *http.Transport
 	BaseUrl   string
-	Ssl bool
+	Ssl       bool
 }
 
 func (pmg *Fetcher) GetArticles(pmids []string) ([]*pubmedstruct.PubmedArticle, error) {
@@ -28,12 +28,12 @@ func (pmg *Fetcher) GetArticlesAndRaw(pmids []string) ([]*pubmedstruct.PubmedArt
 		return nil, nil, errors.New("Error: Empty list of pmids")
 	}
 	if pmg.BaseUrl == "" {
-	   if pmg.Ssl {
-	       pmg.BaseUrl = "https://" + BASE_ENTREZ_URL_FETCH_PUBMED
-	       }else{
-		pmg.BaseUrl = "http://" + BASE_ENTREZ_URL_FETCH_PUBMED
+		if pmg.Ssl {
+			pmg.BaseUrl = "https://" + BASE_ENTREZ_URL_FETCH_PUBMED
+		} else {
+			pmg.BaseUrl = "http://" + BASE_ENTREZ_URL_FETCH_PUBMED
+		}
 	}
-}
 
 	body, err := getPubmedArticlesRaw(pmids, pmg.Transport, pmg.BaseUrl)
 	if err != nil {
@@ -81,6 +81,7 @@ func getPubmedArticlesRaw(pmids []string, transport *http.Transport, baseUrl str
 
 	client := &http.Client{Transport: transport}
 	req, err := http.NewRequest("GET", url, nil)
+	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux i686; rv:10.0) Gecko/20100101 Firefox/10.0")
 	req.Close = true
 	resp, err := client.Do(req)
 
